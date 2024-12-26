@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const dashboardController = require('../controller/dashboardController')
-
+const {isLoggedIn} = require('../middleware/checkAuth')
 // DASHBOARD ROUTES
-router.get('/dashboard', dashboardController.dashboard)
+// authnticating the dashboard
+router.get('/dashboard',isLoggedIn, dashboardController.dashboard)
 
 
 module.exports = router;
