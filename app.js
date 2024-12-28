@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
-
+const methodOverride = require('method-override')
 const connectDB = require("./server/config/db");
 const session = require("express-session");
 const passport = require("passport");
@@ -32,6 +32,7 @@ app.use(passport.session());
 // PASS THE DATA FROM PAGE TO PAGE
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(methodOverride("_method"))
 // connect to database
 connectDB();
 

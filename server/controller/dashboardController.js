@@ -25,7 +25,7 @@ exports.dashboard = async (req, res) => {
       {
         $project: {
           title: { $substr: ["$title", 0, 30] }, // Truncate the title to 30 characters
-          body: { $substr: ["$body", 0, 100] },   // Truncate the body to 100 characters
+          body: { $substr: ["$body", 0, 100] }, // Truncate the body to 100 characters
         },
       },
     ])
@@ -50,4 +50,40 @@ exports.dashboard = async (req, res) => {
     console.error("Error retrieving notes:", error);
     res.status(500).send("Error retrieving notes.");
   }
+};
+
+// view NOte
+exports.dashboardViewNote = async (req, res) => {
+  const note = await Note.findById({ _id: req.params.id })
+    .where({ user: req.user.id })
+    .lean();
+  // get the note and render it
+  if (note) {
+    res.render("dashboard/View-note", {
+      noteID: req.params.id,
+      note,
+      layout: "../views/layouts/dashboard",
+    });
+  } else {
+    res.send("Somethong went wrong.");
+  }
+};
+exports.dashboardUpdateNote = async (req, res) => {
+  try {
+    await Note.findOneAndUpdate(
+      {
+        _id: req.params.id,
+      },
+      {
+        title: req.body.title,
+        body: req.body.body,
+      }
+    ).where({
+      user: req.user.id,
+    });
+    res.redirect("/dashboard");
+  } catch (error) {
+    console.log("Erro in the update method", error);
+  }
+  res.send("Post request handled");
 };
