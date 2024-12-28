@@ -1,8 +1,8 @@
 // creating User modle
 const mongoose = require("mongoose");
-const {Schema} = mongoose
+const { Schema } = mongoose;
 const UserSchema = new Schema({
-  googleId:{
+  googleId: {
     type: String,
     required: true,
   },
@@ -24,7 +24,7 @@ const UserSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now()
   },
 });
 module.exports = mongoose.model("User", UserSchema);

@@ -14,17 +14,17 @@ const app = express();
 // USE PORT FROM ENVIRONMENT VARIABLES OR FALLBACK TO 3000
 const port = 3000 || process.env.port;
 
-app.use(session({
-  secret: 'keyboard cat', 
-  resave: false,
-  saveUninitialized: true,
-  store: MongoStore.create({
-    mongoUrl: process.env.MONGODB_URI
-  }),
-  cookie : {maxAge: new Date (Date.now() + (604800000))}   // 7 days session(user will be logged in for approx 7 days, after loogin in)
-
-}))
-
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGODB_URI,
+    }),
+    cookie: { maxAge: 604800000 }, // 7 days session(user will be logged in for approx 7 days, after loogin in)
+  })
+);
 
 // initialize the passport
 app.use(passport.initialize());

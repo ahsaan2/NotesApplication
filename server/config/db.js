@@ -5,7 +5,7 @@ const connectDB = async () => {
     const conn = await mongoose.connect(process.env.MONGODB_URI); // await used inside asynch function to pause the execution of the funciton until a promise is resolver
     console.log(`Database connected: ${conn.connection.host}`);
   } catch (error) {
-    console.log("Database not connected");
+    console.log("Database  Disconnected!");
     console.log(error);
   }
 };
