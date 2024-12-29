@@ -88,18 +88,46 @@ exports.dashboardUpdateNote = async (req, res) => {
   res.send("Post request handled");
 };
 
+// exports.dashboardDeleteNote = async (req, res) => {
+//   try {
+//     await Note.deleteOne({
+//       _id: req.params.id,
+//     }).where({ user: req.user.id });
+//     res.redirect("/dashboard");
+//   } catch (error) {
+//     console.log("Error deleting note", error);
+//   }
+// };
+
+// Add notes
+
 exports.dashboardDeleteNote = async (req, res) => {
   try {
-    await Note.deleteOne({
-      _id: req.params.id,
-    }).where({ user: req.user.id });
-    res.redirect("/dashboard");
+    // Find the note by id and ensure it belongs to the current user
+    const note = await Note.findOne({ 
+      _id: req.params.id, 
+      user: req.user.id 
+    });
+
+    // Check if the note exists
+    if (!note) {
+      // If no note is found, send an error response
+      return res.status(404).send('Note not found or you do not have permission to delete this note.');
+    }
+
+    // Delete the note
+    await Note.deleteOne({ _id: req.params.id, user: req.user.id });
+
+    // Redirect to the dashboard after deletion
+    res.redirect('/dashboard');
   } catch (error) {
+    // Log the error and provide feedback to the user
     console.log("Error deleting note", error);
+    res.status(500).send('Internal Server Error. Please try again later.');
   }
 };
 
-// Add notes
+
 exports.dashboardAddNote = async (req, res) => {
   res.render("dashboard/add", {
     layout: "../views/layouts/dashboard",
@@ -107,6 +135,7 @@ exports.dashboardAddNote = async (req, res) => {
 };
 exports.dashboardAddNoteSubmit = async (req, res) => {
   try {
+     
     req.body.user = req.user.id;
     res.redirect('/dashboard')
     await Note.create(req.body);
@@ -114,3 +143,6 @@ exports.dashboardAddNoteSubmit = async (req, res) => {
     console.log("Unable to add the new Note", error);
   }
 };
+
+
+
