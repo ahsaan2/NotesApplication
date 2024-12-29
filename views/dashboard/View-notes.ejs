@@ -61,7 +61,11 @@
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
             Close
           </button>
-          <button type="button" class="btn btn-danger">Delete Note</button>
+<form action="/dashboard/item-delete/<%=noteID %>?_method=DELETE" method="POST"
+    class="position-relative">
+           
+          <button type="submit" class="btn btn-danger">Delete Note</button>
+        </form>
         </div>
       </div>
     </div>

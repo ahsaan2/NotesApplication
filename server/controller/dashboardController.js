@@ -87,3 +87,30 @@ exports.dashboardUpdateNote = async (req, res) => {
   }
   res.send("Post request handled");
 };
+
+exports.dashboardDeleteNote = async (req, res) => {
+  try {
+    await Note.deleteOne({
+      _id: req.params.id,
+    }).where({ user: req.user.id });
+    res.redirect("/dashboard");
+  } catch (error) {
+    console.log("Error deleting note", error);
+  }
+};
+
+// Add notes
+exports.dashboardAddNote = async (req, res) => {
+  res.render("dashboard/add", {
+    layout: "../views/layouts/dashboard",
+  });
+};
+exports.dashboardAddNoteSubmit = async (req, res) => {
+  try {
+    req.body.user = req.user.id;
+    res.redirect('/dashboard')
+    await Note.create(req.body);
+  } catch (error) {
+    console.log("Unable to add the new Note", error);
+  }
+};
